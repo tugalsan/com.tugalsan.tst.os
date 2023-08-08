@@ -29,21 +29,23 @@ public class Main {
         runme(Duration.ofMillis(10), exe);
         runme(Duration.ofMillis(100), exe);
         runme(Duration.ofMillis(1000), exe);
-        runme(Duration.ofMillis(10000), exe);
 
         System.out.println("Time taken: " + timer.end().toMillis() + " milliseconds");
     }
 
     private static void runme(Duration until, Path exe) {
+        var elapsed = TS_TimeElapsed.of();
         out.println("For dur: " + until);
         TGS_CallableType1<TS_OsProcess, TS_ThreadSyncTrigger> callable = kt -> {
             return TS_OsProcess.of(exe.toString());
         };
         IntStream.range(0, 10).forEach(i -> {
+            elapsed.restart();
             var called = TS_ThreadAsyncAwait.callSingle(null, until, callable);
+            var durElapsed = elapsed.end();
             var result = called.resultsForSuccessfulOnes.stream().findAny().orElse(null);
             if (result != null) {
-                out.println("  -result.output: " + result.output);
+                out.println("  -result.output: " + result.output + " , elapsed: " + durElapsed);
             }
         });
     }

@@ -6,9 +6,7 @@ import com.tugalsan.api.os.server.TS_OsPlatformUtils;
 import com.tugalsan.api.os.server.TS_OsProcess;
 import com.tugalsan.api.thread.server.async.TS_ThreadAsyncAwait;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
-import com.tugalsan.api.time.server.TS_TimeElapsed;
 import static java.lang.System.out;
-import java.nio.file.Path;
 import java.time.Duration;
 import java.util.stream.IntStream;
 
@@ -26,23 +24,20 @@ public class Main {
         TGS_CallableType1<TS_OsProcess, TS_ThreadSyncTrigger> callable = kt -> TS_OsProcess.of(
                 "C:\\me\\codes\\com.tugalsan\\tut\\com.tugalsan.tut.graalvm\\helloworld.exe"
         );
-        var elapsed = TS_TimeElapsed.of();
-        runme(Duration.ofMillis(1), callable, elapsed);
-        runme(Duration.ofMillis(10), callable, elapsed);
-        runme(Duration.ofMillis(100), callable, elapsed);
-        runme(Duration.ofMillis(1000), callable, elapsed);
+        runme(Duration.ofMillis(1), callable);
+        runme(Duration.ofMillis(10), callable);
+        runme(Duration.ofMillis(100), callable);
+        runme(Duration.ofMillis(1000), callable);
     }
 
-    private static void runme(Duration until, TGS_CallableType1<TS_OsProcess, TS_ThreadSyncTrigger> callable, TS_TimeElapsed elapsed) {
+    private static void runme(Duration until, TGS_CallableType1<TS_OsProcess, TS_ThreadSyncTrigger> callable) {
         out.println("For dur: " + until);
         IntStream.range(0, 10).forEach(i -> {
-            elapsed.restart();
             var called = TS_ThreadAsyncAwait.callSingle(null, until, callable);
-            var durElapsed = elapsed.elapsed_now();
-            var result = called.resultsForSuccessfulOnes.stream().findAny().orElse(null);
-            if (result != null) {
-                out.println("  -result.output: " + result.output + " , elapsed: " + durElapsed);
+            if (called.hasError()) {
+                return;
             }
+            out.println("  -result.output: " + called.resultIfSuccessful.get().output + " , elapsed: " + called.elapsed);
         });
     }
 }

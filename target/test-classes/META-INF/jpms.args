@@ -1,3 +1,5 @@
+--add-modules
+jdk.incubator.vector
 --patch-module
 com.tugalsan.tst.os=_
 --add-reads

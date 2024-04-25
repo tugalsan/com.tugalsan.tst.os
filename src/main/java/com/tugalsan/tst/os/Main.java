@@ -1,6 +1,7 @@
 package com.tugalsan.tst.os;
 
 import com.tugalsan.api.callable.client.TGS_CallableType1;
+import com.tugalsan.api.charset.client.TGS_CharSetCast;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.os.server.TS_OsPlatformUtils;
 import com.tugalsan.api.os.server.TS_OsProcess;
@@ -20,6 +21,15 @@ public class Main {
     public static void main(String... s) {
         d.cr("main", "TS_OSUtils.isWindows()", TS_OsPlatformUtils.isWindows());
         d.cr("main", "TS_OSUtils.getVersion()", TS_OsPlatformUtils.getVersion());
+
+        var text = "öçÖÇşiŞİğüĞÜıI";
+        var c = TGS_CharSetCast.current();
+        var t = TGS_CharSetCast.turkish();
+        var e = TGS_CharSetCast.english();
+
+        d.cr("main", "current", c.toLowerCase(text), c.toUpperCase(text), c.localType);
+        d.cr("main", "turkish", t.toLowerCase(text), t.toUpperCase(text), t.localType);
+        d.cr("main", "english", e.toLowerCase(text), e.toUpperCase(text), e.localType);
 
         TGS_CallableType1<TS_OsProcess, TS_ThreadSyncTrigger> callable = kt -> TS_OsProcess.of(
                 "C:\\me\\codes\\com.tugalsan\\tut\\com.tugalsan.tut.graalvm\\helloworld.exe"

@@ -1,6 +1,6 @@
 package com.tugalsan.tst.os;
 
-import com.tugalsan.api.callable.client.TGS_CallableType1;
+import com.tugalsan.api.function.client.TGS_Func_OutTyped_In1;
 import com.tugalsan.api.charset.client.TGS_CharSetCast;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.os.server.TS_OsPlatformUtils;
@@ -31,7 +31,7 @@ public class Main {
         d.cr("main", "turkish", t.toLowerCase(text), t.toUpperCase(text), t.localType);
         d.cr("main", "english", e.toLowerCase(text), e.toUpperCase(text), e.localType);
 
-        TGS_CallableType1<TS_OsProcess, TS_ThreadSyncTrigger> callable = kt -> TS_OsProcess.of(
+        TGS_Func_OutTyped_In1<TS_OsProcess, TS_ThreadSyncTrigger> callable = kt -> TS_OsProcess.of(
                 "C:\\me\\codes\\com.tugalsan\\tut\\com.tugalsan.tut.graalvm\\helloworld.exe"
         );
         runme(Duration.ofMillis(1), callable);
@@ -40,7 +40,7 @@ public class Main {
         runme(Duration.ofMillis(1000), callable);
     }
 
-    private static void runme(Duration until, TGS_CallableType1<TS_OsProcess, TS_ThreadSyncTrigger> callable) {
+    private static void runme(Duration until, TGS_Func_OutTyped_In1<TS_OsProcess, TS_ThreadSyncTrigger> callable) {
         out.println("For dur: " + until);
         IntStream.range(0, 10).forEach(i -> {
             var called = TS_ThreadAsyncAwait.callSingle(null, until, callable);

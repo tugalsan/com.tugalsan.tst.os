@@ -3,6 +3,7 @@ package com.tugalsan.tst.os;
 import com.tugalsan.api.function.client.TGS_Func_OutTyped_In1;
 import com.tugalsan.api.charset.client.TGS_CharSetCast;
 import com.tugalsan.api.log.server.TS_Log;
+import com.tugalsan.api.os.server.TS_OsCpuUtils;
 import com.tugalsan.api.os.server.TS_OsPlatformUtils;
 import com.tugalsan.api.os.server.TS_OsProcess;
 import com.tugalsan.api.thread.server.async.TS_ThreadAsyncAwait;
@@ -19,6 +20,12 @@ public class Main {
     //java --enable-preview --add-modules jdk.incubator.vector -jar target/com.tugalsan.tst.os-1.0-SNAPSHOT-jar-with-dependencies.jar
     //java -jar target/com.tugalsan.tst.os-1.0-SNAPSHOT-jar-with-dependencies.jar
     public static void main(String... s) {
+        System.out.println(TS_OsCpuUtils.toStringAll());
+
+        if (true) {
+            return;
+        }
+
         d.cr("main", "TS_OSUtils.isWindows()", TS_OsPlatformUtils.isWindows());
         d.cr("main", "TS_OSUtils.getVersion()", TS_OsPlatformUtils.getVersion());
 

@@ -20,6 +20,7 @@ public class Main {
     //java --enable-preview --add-modules jdk.incubator.vector -jar target/com.tugalsan.tst.os-1.0-SNAPSHOT-jar-with-dependencies.jar
     //java -jar target/com.tugalsan.tst.os-1.0-SNAPSHOT-jar-with-dependencies.jar
     public static void main(String... s) {
+        TS_ThreadSyncTrigger killTrigger = TS_ThreadSyncTrigger.of("main");
         System.out.println(TS_OsCpuUtils.toStringAll());
 
         if (true) {
@@ -41,16 +42,16 @@ public class Main {
         TGS_Func_OutTyped_In1<TS_OsProcess, TS_ThreadSyncTrigger> callable = kt -> TS_OsProcess.of(
                 "C:\\me\\codes\\com.tugalsan\\tut\\com.tugalsan.tut.graalvm\\helloworld.exe"
         );
-        runme(Duration.ofMillis(1), callable);
-        runme(Duration.ofMillis(10), callable);
-        runme(Duration.ofMillis(100), callable);
-        runme(Duration.ofMillis(1000), callable);
+        runme(killTrigger, Duration.ofMillis(1), callable);
+        runme(killTrigger, Duration.ofMillis(10), callable);
+        runme(killTrigger, Duration.ofMillis(100), callable);
+        runme(killTrigger, Duration.ofMillis(1000), callable);
     }
 
-    private static void runme(Duration until, TGS_Func_OutTyped_In1<TS_OsProcess, TS_ThreadSyncTrigger> callable) {
+    private static void runme(TS_ThreadSyncTrigger killTrigger, Duration until, TGS_Func_OutTyped_In1<TS_OsProcess, TS_ThreadSyncTrigger> callable) {
         out.println("For dur: " + until);
         IntStream.range(0, 10).forEach(i -> {
-            var called = TS_ThreadAsyncAwait.callSingle(null, until, callable);
+            var called = TS_ThreadAsyncAwait.callSingle(killTrigger.newChild("runme"), until, callable);
             if (called.hasError()) {
                 return;
             }

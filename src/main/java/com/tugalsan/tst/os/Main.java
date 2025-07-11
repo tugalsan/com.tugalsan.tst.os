@@ -1,12 +1,13 @@
 package com.tugalsan.tst.os;
 
-import com.tugalsan.api.function.client.TGS_Func_OutTyped_In1;
 import com.tugalsan.api.charset.client.TGS_CharSetCast;
+import com.tugalsan.api.function.client.maythrowexceptions.unchecked.TGS_FuncMTU_OutTyped_In1;
+import com.tugalsan.api.id.server.TS_IdMachineUtils;
 import com.tugalsan.api.log.server.TS_Log;
 import com.tugalsan.api.os.server.TS_OsCpuUtils;
 import com.tugalsan.api.os.server.TS_OsPlatformUtils;
 import com.tugalsan.api.os.server.TS_OsProcess;
-import com.tugalsan.api.thread.server.async.TS_ThreadAsyncAwait;
+import com.tugalsan.api.thread.server.async.await.TS_ThreadAsyncAwait;
 import com.tugalsan.api.thread.server.sync.TS_ThreadSyncTrigger;
 import static java.lang.System.out;
 import java.time.Duration;
@@ -22,6 +23,7 @@ public class Main {
     public static void main(String... s) {
         TS_ThreadSyncTrigger killTrigger = TS_ThreadSyncTrigger.of("main");
         System.out.println(TS_OsCpuUtils.toStringAll());
+        System.out.println("uuid:" + TS_IdMachineUtils.get());
 
         if (true) {
             return;
@@ -39,7 +41,7 @@ public class Main {
         d.cr("main", "turkish", t.toLowerCase(text), t.toUpperCase(text), t.localType);
         d.cr("main", "english", e.toLowerCase(text), e.toUpperCase(text), e.localType);
 
-        TGS_Func_OutTyped_In1<TS_OsProcess, TS_ThreadSyncTrigger> callable = kt -> TS_OsProcess.of(
+        TGS_FuncMTU_OutTyped_In1<TS_OsProcess, TS_ThreadSyncTrigger> callable = kt -> TS_OsProcess.of(
                 "C:\\me\\codes\\com.tugalsan\\tut\\com.tugalsan.tut.graalvm\\helloworld.exe"
         );
         runme(killTrigger, Duration.ofMillis(1), callable);
@@ -48,7 +50,7 @@ public class Main {
         runme(killTrigger, Duration.ofMillis(1000), callable);
     }
 
-    private static void runme(TS_ThreadSyncTrigger killTrigger, Duration until, TGS_Func_OutTyped_In1<TS_OsProcess, TS_ThreadSyncTrigger> callable) {
+    private static void runme(TS_ThreadSyncTrigger killTrigger, Duration until, TGS_FuncMTU_OutTyped_In1<TS_OsProcess, TS_ThreadSyncTrigger> callable) {
         out.println("For dur: " + until);
         IntStream.range(0, 10).forEach(i -> {
             var called = TS_ThreadAsyncAwait.callSingle(killTrigger.newChild("runme"), until, callable);
